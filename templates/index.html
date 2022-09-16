@@ -12,160 +12,160 @@
 <style>
     body {
         background: url('https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2022/07/21/313731658379139117.jpg');
-        background-size: cover;
-        background-color: hsl(308, 78%, 29%);
         background-repeat: no-repeat;
+        background-size: cover;
+        width: 35;
+        margin: 0 auto;
         background-attachment: fixed;
-
-
-        
-        
     }
 </style>
 
-<center>
+<body>
 
 
-    <div id="name_table" style="text-align:center"></div>
+    <center>
+
+
+        <div id="name_table" style="text-align:center"></div>
 
 
 
-    <h3>코인 정보 보기</h3>
-    검색하려는 코인 : <input type="text" id="name"> <br>
-    <button id="selectCoin" onclick="selectCoin()">조회</button>
+        <h3>코인 정보 보기</h3>
+        검색하려는 코인 : <input type="text" id="name"> <br>
+        <button id="selectCoin" onclick="selectCoin()">조회</button>
 
-    <div id="curve_chart"></div>
+        <div id="curve_chart"></div>
 
-    <script>
-        function selectCoin() {
-            let data = null;
-            document.getElementById("curve_chart").style.width = "900px";
-            document.getElementById("curve_chart").style.height = "500px";
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    rawdata = this.responseText;
-                    data = JSON.parse(rawdata)
-                    google.charts.load('current', { 'packages': ['corechart'] });
-                    google.charts.setOnLoadCallback(drawChart);
+        <script>
+            function selectCoin() {
+                let data = null;
+                document.getElementById("curve_chart").style.width = "900px";
+                document.getElementById("curve_chart").style.height = "500px";
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        rawdata = this.responseText;
+                        data = JSON.parse(rawdata)
+                        google.charts.load('current', { 'packages': ['corechart'] });
+                        google.charts.setOnLoadCallback(drawChart);
 
-                    function drawChart() {
-                        let rows = [['Date', '시작가', '종가']];
-                        for (i = 0; i < Object.keys(data).length; i++) {
-                            rows.push([data[i].date, data[i].open, data[i].close])
+                        function drawChart() {
+                            let rows = [['Date', '시작가', '종가']];
+                            for (i = 0; i < Object.keys(data).length; i++) {
+                                rows.push([data[i].date, data[i].open, data[i].close])
+                            }
+                            let logic = google.visualization.arrayToDataTable(rows);
+
+                            let options = {
+                                title: 'Price',
+                                curveType: 'function',
+                                legend: { position: 'bottom' }
+                            };
+
+                            let chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                            chart.draw(logic, options);
                         }
-                        let logic = google.visualization.arrayToDataTable(rows);
-
-                        let options = {
-                            title: 'Price',
-                            curveType: 'function',
-                            legend: { position: 'bottom' }
-                        };
-
-                        let chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-                        chart.draw(logic, options);
                     }
-                }
-            };
-            xhttp.open("POST", "select");
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhttp.send("name=" + document.getElementById("name").value);
-        }
-    </script>
-
-    <h3>해당 코인의 최고점 최저점 검색</h3>
-    <button onclick="minmaxCoin()">검색</button>
-    <br><br>
-
-    <div id="chart_div"></div>
-
-    <script>
-        function minmaxCoin() {
-            let data = null;
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    data = this.responseText;
-                    data = JSON.parse(data)
-                    console.log(data)
-                    google.charts.load('current', { 'packages': ['bar'] });
-                    google.charts.setOnLoadCallback(drawChart);
-
-                    function drawChart() {
-                        let logic = google.visualization.arrayToDataTable([
-                            ['Date', data[0].name],
-                            [data[1].date_low, data[1].low],
-                            [data[0].date_high, data[0].high]
-                        ]);
-
-                        let options = {
-                            chart: {
-                                title: data[0].name + '의 최고점과 최저점'
-                            },
-
-                            bars: 'horizontal', // Required for Material Bar Charts.
-                            hAxis: { format: 'decimal' },
-                            width: 900,
-                            height: 300,
-                            colors: ['#1b9e77', '#d95f02', '#7570b3']
-                        };
-
-                        let chart = new google.charts.Bar(document.getElementById('chart_div'));
-
-                        chart.draw(logic, google.charts.Bar.convertOptions(options));
-                    }
-                }
-            };
-            xhttp.open("POST", "minmax");
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhttp.send("name=" + document.getElementById("name").value);
-        }
-
-        function selectname() {
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    data = this.responseText;
-                    data = JSON.parse(data)
-
-                    google.charts.load('current', { 'packages': ['table'] });
-                    google.charts.setOnLoadCallback(drawTable);
-
-                    function drawTable() {
-                        let logic = new google.visualization.DataTable();
-                        logic.addColumn('string', 'Name');
-                        let rows = [];
-                        for (i = 0; i < Object.keys(data).length; i++) {
-                            rows.push([data[i].name])
-
-                        }
-
-                        logic.addRows(rows);
-
-                        var table = new google.visualization.Table(document.getElementById('name_table'));
-
-                        table.draw(logic, {
-                            showRowNumber: true,
-                            width: '150px',
-                            height: '100px',
-
-                        });
-                    }
-                }
+                };
+                xhttp.open("POST", "select");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                xhttp.send("name=" + document.getElementById("name").value);
             }
-            xhttp.open("POST", "/intro");
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-            xhttp.send();
-        }
-        window.onload = function () {
+        </script>
 
-            selectname();
-        }
+        <h3>해당 코인의 최고점 최저점 검색</h3>
+        <button onclick="minmaxCoin()">검색</button>
+        <br><br>
 
-    </script>
+        <div id="chart_div"></div>
 
-</center>
+        <script>
+            function minmaxCoin() {
+                let data = null;
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        data = this.responseText;
+                        data = JSON.parse(data)
+                        console.log(data)
+                        google.charts.load('current', { 'packages': ['bar'] });
+                        google.charts.setOnLoadCallback(drawChart);
+
+                        function drawChart() {
+                            let logic = google.visualization.arrayToDataTable([
+                                ['Date', data[0].name],
+                                [data[1].date_low, data[1].low],
+                                [data[0].date_high, data[0].high]
+                            ]);
+
+                            let options = {
+                                chart: {
+                                    title: data[0].name + '의 최고점과 최저점'
+                                },
+
+                                bars: 'horizontal', // Required for Material Bar Charts.
+                                hAxis: { format: 'decimal' },
+                                width: 900,
+                                height: 300,
+                                colors: ['#1b9e77', '#d95f02', '#7570b3']
+                            };
+
+                            let chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+                            chart.draw(logic, google.charts.Bar.convertOptions(options));
+                        }
+                    }
+                };
+                xhttp.open("POST", "minmax");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                xhttp.send("name=" + document.getElementById("name").value);
+            }
+
+            function selectname() {
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        data = this.responseText;
+                        data = JSON.parse(data)
+
+                        google.charts.load('current', { 'packages': ['table'] });
+                        google.charts.setOnLoadCallback(drawTable);
+
+                        function drawTable() {
+                            let logic = new google.visualization.DataTable();
+                            logic.addColumn('string', 'Name');
+                            let rows = [];
+                            for (i = 0; i < Object.keys(data).length; i++) {
+                                rows.push([data[i].name])
+
+                            }
+
+                            logic.addRows(rows);
+
+                            var table = new google.visualization.Table(document.getElementById('name_table'));
+
+                            table.draw(logic, {
+                                showRowNumber: true,
+                                width: '150px',
+                                height: '100px',
+
+                            });
+                        }
+                    }
+                }
+                xhttp.open("POST", "/intro");
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                xhttp.send();
+            }
+            window.onload = function () {
+
+                selectname();
+            }
+
+        </script>
+
+    </center>
 </body>
 
 </html>
