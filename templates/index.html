@@ -12,14 +12,14 @@
 <style>
     body {
         background: url('https://img.kbs.co.kr/kbs/620/news.kbs.co.kr/data/fckeditor/new/image/2022/07/21/313731658379139117.jpg');
-        background-size: 100%;
+        background-size: cover;
         background-color: hsl(308, 78%, 29%);
         background-repeat: no-repeat;
         background-attachment: fixed;
 
 
         
-        margin: 0 auto;
+        
     }
 </style>
 
@@ -106,6 +106,7 @@
 
                             bars: 'horizontal', // Required for Material Bar Charts.
                             hAxis: { format: 'decimal' },
+                            width: 900,
                             height: 300,
                             colors: ['#1b9e77', '#d95f02', '#7570b3']
                         };
@@ -146,7 +147,7 @@
 
                         table.draw(logic, {
                             showRowNumber: true,
-                            width: '200px',
+                            width: '150px',
                             height: '100px',
 
                         });
