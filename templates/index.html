@@ -13,22 +13,23 @@
     body {
         background: url('https://img.freepik.com/premium-vector/bitcoin-coins-flying-isolated-on-a-white-background-bitcoin-virtual-cryptocurrency-explosion-realistic-3d-vector-illustration_545793-757.jpg?w=1060');
         background-size: cover;
-        
+        background-color: hsl(308, 78%, 29%);
         background-repeat: no-repeat;
     }
 </style>
 
-
+<center>
 
 
     <div id="name_table" style="text-align:center"></div>
 
 
-    <h3 style="text-align:center">코인 정보 보기</h3>
-    검색하려는 코인 : <input type="text" id="name" style="text-align:center"> <br>
-    <button id="selectCoin" onclick="selectCoin()" style="text-align:center">조회</button>
 
-    <div id="curve_chart" style="text-align:center"></div>
+    <h3>코인 정보 보기</h3>
+    검색하려는 코인 : <input type="text" id="name"> <br>
+    <button id="selectCoin" onclick="selectCoin()">조회</button>
+
+    <div id="curve_chart"></div>
 
     <script>
         function selectCoin() {
@@ -158,7 +159,7 @@
 
     </script>
 
-
+</center>
 </body>
 
 </html>
