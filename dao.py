@@ -4,7 +4,7 @@ from dbutil import getConnect
 
 #  id, asset, name, date, open, high, low, close
 class bitDAO:
-    //관리자
+    #관리자
     def coininsert(self, bitDTO):
         try:
             conn = getConnect()
@@ -18,7 +18,7 @@ class bitDAO:
         finally:
             cur.close()
             conn.close()
-    //사용자
+    #사용자
     def allcoin(self, name):
         try:
             conn = getConnect()
@@ -38,7 +38,7 @@ class bitDAO:
             cur.close()
             conn.close()
         
-    //관리자
+    #관리자
     def deletecoin(self, date, asset):
         try:
             conn = getConnect()
@@ -55,7 +55,7 @@ class bitDAO:
         finally:
             cur.close()
             conn.close()
-    //사용자
+    #사용자
     def minmax(self,name):
         myresult = []
         try:
@@ -82,7 +82,7 @@ class bitDAO:
             conn.close()
 
         return myresult
-    //기본 제공
+    #기본 제공
     def selectname(self):
         myresult = []
         try:
